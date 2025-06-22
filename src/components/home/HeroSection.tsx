@@ -66,9 +66,6 @@ const HeroSection: React.FC<HeroSectionProps> = memo(
       return () => window.removeEventListener('mousemove', handleMouseMove);
     }, [isClient, handleMouseMove]);
 
-    // ✅ Remover console.log que causa re-render tracking
-    // console.log('URL da imagem principal recebida no HeroSection:', imageUrlPrincipal);
-
     return (
       <section className='relative min-h-screen flex items-center overflow-hidden pt-8'>
         {/* Background Effects */}
@@ -125,9 +122,11 @@ const HeroSection: React.FC<HeroSectionProps> = memo(
                 </span>
               </motion.div>
 
-              <h1 className='font-heading text-5xl md:text-6xl lg:text-7xl font-black mb-3 leading-tight'>
+              <h1 className='font-heading text-5xl md:text-6xl lg:text-7xl font-black mb-3 leading-none'>
+                {/* ✅ AJUSTE: de 'leading-tight' para 'leading-none' */}
                 <span className='block text-white'>{titleData.firstName}</span>
-                <span className='bg-gradient-to-r from-blue-400 to-orange-400 text-transparent bg-clip-text'>
+                <span className=' bg-gradient-to-r from-blue-400 to-orange-400 text-transparent bg-clip-text'>
+                  {/* ✅ AJUSTE: adicionado 'block' para consistência */}
                   {titleData.lastName}
                 </span>
                 <motion.span
