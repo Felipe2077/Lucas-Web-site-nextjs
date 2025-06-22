@@ -46,7 +46,7 @@ const HeaderGlassmorphism = () => {
   return (
     <>
       <motion.header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all bg-transparent  duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           isScrolled ? 'py-1 sm:py-2' : 'py-2 sm:py-4'
         }`}
         initial={{ y: -100 }}

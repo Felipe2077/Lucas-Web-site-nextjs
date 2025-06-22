@@ -1,5 +1,6 @@
+// src/components/calendario/ProximaCorridaCountDown.tsx
 'use client';
-//src/components/calendario/ProximaCorridaCountDown.tsx
+
 import type { CountdownUnitProps } from '@/types/sanity';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -24,7 +25,8 @@ const CountdownUnit = ({
     <div className='relative w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 lg:w-40 lg:h-40'>
       <div className='absolute inset-0 bg-gradient-to-br from-blue-600/20 to-purple-600/20 rounded-xl sm:rounded-2xl backdrop-blur-xl border border-white/10'>
         <div className='relative h-full flex flex-col items-center justify-center'>
-          <span className='text-xl sm:text-2xl md:text-4xl lg:text-5xl xl:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-300'>
+          {/* ✅ AJUSTE: Tamanho máximo reduzido e gradiente de cor suavizado */}
+          <span className='text-xl sm:text-2xl md:text-4xl lg:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-b from-gray-200 to-gray-400'>
             {String(value).padStart(2, '0')}
           </span>
           <span className='text-xs sm:text-xs md:text-sm lg:text-base text-gray-400 uppercase tracking-wider mt-1'>
@@ -47,7 +49,6 @@ const ProximaCorridaCountdown = ({
     segundos: 0,
   });
 
-  // Memoização dos dados do evento
   const eventData = useMemo(() => {
     if (proximaCorrida?.dataDoEvento) {
       return {
@@ -57,16 +58,9 @@ const ProximaCorridaCountdown = ({
         cidade: proximaCorrida.cidade,
       };
     }
-    // Fallback estável se nenhuma corrida for passada
-    return {
-      nome: 'Próxima Corrida',
-      data: new Date('2025-06-29T18:30:00.000Z').toISOString(),
-      circuito: 'Aguardando confirmação',
-      cidade: 'Brasil',
-    };
+    return null;
   }, [proximaCorrida]);
 
-  // Efeito do contador regressivo
   useEffect(() => {
     if (!eventData?.data) return;
 
@@ -93,23 +87,51 @@ const ProximaCorridaCountdown = ({
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [eventData?.data]);
+  }, [eventData]);
+
+  if (!eventData) {
+    return (
+      <section className='relative py-24 md:py-32 overflow-hidden'>
+        <div className='container mx-auto px-4 text-center'>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <motion.div
+              className='inline-block text-6xl md:text-7xl mb-6'
+              animate={{
+                scale: [1, 1.1, 1],
+              }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            >
+              🏁
+            </motion.div>
+            <h2 className='text-3xl md:text-4xl font-bold text-white mb-4'>
+              Aguardando Próximas Etapas
+            </h2>
+            <p className='text-lg text-gray-400 max-w-2xl mx-auto mb-8'>
+              O calendário da temporada está sendo finalizado. Fique de olho
+              para não perder nenhuma novidade e confira os resultados das
+              corridas anteriores.
+            </p>
+            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link
+                href='/calendario'
+                className='inline-flex items-center justify-center gap-2 px-8 py-3 border-2 border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white rounded-full font-semibold transition-all duration-300'
+              >
+                <span>Ver Calendário Completo</span>
+              </Link>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className='relative py-16 md:py-24 overflow-hidden'>
-      <div className='absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900'>
-        <motion.div
-          className='absolute top-20 -left-40 w-80 h-80 bg-blue-500 rounded-full opacity-20 blur-3xl'
-          animate={{ x: [0, 100, 0], y: [0, -50, 0] }}
-          transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
-        />
-        <motion.div
-          className='absolute bottom-20 -right-40 w-80 h-80 bg-orange-500 rounded-full opacity-20 blur-3xl'
-          animate={{ x: [0, -100, 0], y: [0, 50, 0] }}
-          transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      </div>
-
       <div className='relative z-10 container mx-auto px-4'>
         <motion.div
           className='text-center mb-12 md:mb-16'
@@ -118,8 +140,11 @@ const ProximaCorridaCountdown = ({
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
         >
-          <h2 className='text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black text-white mb-4'>
-            {eventData.nome}
+          {/* ✅ AJUSTE: Tamanho e cor do título ajustados */}
+          <h2 className='text-3xl sm:text-4xl lg:text-5xl font-black mb-4'>
+            <span className='bg-gradient-to-r from-blue-400 to-orange-400 text-transparent bg-clip-text'>
+              {eventData.nome}
+            </span>
           </h2>
           <div className='flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-gray-400'>
             <div className='flex items-center gap-2'>
@@ -169,7 +194,6 @@ const ProximaCorridaCountdown = ({
                   <p className='text-gray-600 text-sm'>Em breve</p>
                 </div>
               </div>
-
               <div className='flex flex-col sm:flex-row gap-4 mt-6 md:mt-8 justify-center'>
                 <Link
                   href='/calendario'

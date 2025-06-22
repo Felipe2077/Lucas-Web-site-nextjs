@@ -18,14 +18,11 @@ const HeroSection: React.FC<HeroSectionProps> = memo(
     const [isClient, setIsClient] = useState(false);
     const { scrollY } = useScroll();
 
-    // ✅ Throttle do mouse movement para reduzir re-renders
     const lastMouseMoveRef = useRef<number>(0);
 
-    // ✅ Scroll effects mais suaves - valores aumentados
-    const y1 = useTransform(scrollY, [0, 1000], [0, 150]); // Era 500, agora 1000
-    const opacity = useTransform(scrollY, [0, 800], [1, 0]); // Era 300, agora 800
+    const y1 = useTransform(scrollY, [0, 1000], [0, 150]);
+    const opacity = useTransform(scrollY, [0, 800], [1, 0]);
 
-    // ✅ Memoizar dados do título
     const titleData = useMemo(() => {
       const fullTitle = paginaSobre?.titulo || 'Lucas Foresti';
       const words = fullTitle.split(' ');
@@ -35,7 +32,6 @@ const HeroSection: React.FC<HeroSectionProps> = memo(
       };
     }, [paginaSobre?.titulo]);
 
-    // ✅ Memoizar alt text
     const imageAlt = useMemo(
       () =>
         paginaSobre?.imagemPrincipal?.alt ||
@@ -48,10 +44,9 @@ const HeroSection: React.FC<HeroSectionProps> = memo(
       setIsClient(true);
     }, []);
 
-    // ✅ Throttled mouse move handler
     const handleMouseMove = useCallback((e: MouseEvent) => {
       const now = Date.now();
-      if (now - lastMouseMoveRef.current < 16) return; // ~60fps
+      if (now - lastMouseMoveRef.current < 16) return;
       lastMouseMoveRef.current = now;
 
       const x = (e.clientX / window.innerWidth - 0.5) * 10;
@@ -67,12 +62,12 @@ const HeroSection: React.FC<HeroSectionProps> = memo(
     }, [isClient, handleMouseMove]);
 
     return (
-      <section className='relative min-h-screen flex items-center overflow-hidden pt-8'>
+      // ✅ AJUSTE: Adicionado padding inferior (pb-24) para dar espaço no mobile.
+      <section className='relative min-h-screen flex items-center overflow-hidden pt-8 pb-24 sm:pb-16'>
         {/* Background Effects */}
         <div className='absolute inset-0'>
           <div className='absolute inset-0 bg-gradient-to-br from-blue-900/20 via-black to-orange-900/20' />
 
-          {/* ✅ Memoizar animações para evitar recriação */}
           <motion.div
             className='absolute top-1/4 -left-40 w-96 h-96 bg-blue-500 rounded-full opacity-10 blur-3xl'
             animate={{
@@ -123,10 +118,8 @@ const HeroSection: React.FC<HeroSectionProps> = memo(
               </motion.div>
 
               <h1 className='font-heading text-5xl md:text-6xl lg:text-7xl font-black mb-3 leading-none'>
-                {/* ✅ AJUSTE: de 'leading-tight' para 'leading-none' */}
                 <span className='block text-white'>{titleData.firstName}</span>
-                <span className=' bg-gradient-to-r from-blue-400 to-orange-400 text-transparent bg-clip-text'>
-                  {/* ✅ AJUSTE: adicionado 'block' para consistência */}
+                <span className='block bg-gradient-to-r from-blue-400 to-orange-400 text-transparent bg-clip-text'>
                   {titleData.lastName}
                 </span>
                 <motion.span
@@ -266,44 +259,6 @@ const HeroSection: React.FC<HeroSectionProps> = memo(
                       </div>
                     </div>
                   </div>
-
-                  <motion.div
-                    className='absolute -top-4 -right-4 w-16 h-16 lg:w-20 lg:h-20 bg-blue-500/20 backdrop-blur-md rounded-full flex items-center justify-center'
-                    animate={{ rotate: 360 }}
-                    transition={{
-                      duration: 20,
-                      repeat: Infinity,
-                      ease: 'linear',
-                    }}
-                  >
-                    <svg
-                      className='w-8 h-8 lg:w-10 lg:h-10 text-blue-400'
-                      fill='currentColor'
-                      viewBox='0 0 24 24'
-                    >
-                      <path d='M12 2L13.09 8.26L20 9L13.09 9.74L12 16L10.91 9.74L4 9L10.91 8.26L12 2Z' />
-                    </svg>
-                  </motion.div>
-
-                  <motion.div
-                    className='absolute -left-2 top-1/2 w-16 h-0.5 bg-gradient-to-r from-transparent to-blue-400'
-                    animate={{ x: [0, 20, 0], opacity: [0, 1, 0] }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                    }}
-                  />
-                  <motion.div
-                    className='absolute -left-2 top-1/2 mt-3 w-12 h-0.5 bg-gradient-to-r from-transparent to-orange-400'
-                    animate={{ x: [0, 15, 0], opacity: [0, 1, 0] }}
-                    transition={{
-                      duration: 2.5,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                      delay: 0.5,
-                    }}
-                  />
                 </div>
               </motion.div>
             )}
