@@ -97,6 +97,7 @@ export default function CalendarioPageClient({
 
   const hojeISO = new Date().toISOString();
 
+  // ✅ Separar eventos de forma mais clara
   const eventosFuturos = eventos
     .filter((e) => {
       const dataEvento = new Date(e.dataDoEvento);
@@ -110,14 +111,27 @@ export default function CalendarioPageClient({
         new Date(a.dataDoEvento).getTime() - new Date(b.dataDoEvento).getTime()
     );
 
-  const eventosPassados = eventos.filter((e) => {
-    const dataEvento = new Date(e.dataDoEvento);
-    return (
-      e.status === 'realizado' ||
-      e.status === 'cancelado' ||
-      dataEvento.toISOString() < hojeISO
+  // ✅ Eventos passados: Data passou OU status realizado/cancelado
+  const eventosPassados = eventos
+    .filter((e) => {
+      const dataEvento = new Date(e.dataDoEvento);
+
+      // ✅ NOVA LÓGICA: Se a data passou, incluir INDEPENDENTE do status
+      if (dataEvento.toISOString() < hojeISO) {
+        return true;
+      }
+
+      // ✅ OU se é realizado/cancelado, mesmo que seja futuro
+      if (e.status === 'realizado' || e.status === 'cancelado') {
+        return true;
+      }
+
+      return false;
+    })
+    .sort(
+      (a, b) =>
+        new Date(b.dataDoEvento).getTime() - new Date(a.dataDoEvento).getTime() // ✅ Mais recente primeiro
     );
-  });
 
   return (
     <section className='min-h-screen bg-black text-white py-20'>
@@ -141,13 +155,17 @@ export default function CalendarioPageClient({
             </span>
           </motion.div>
 
-          <h1 className='text-5xl md:text-6xl font-black text-white mb-4'>
+          <h1 className='text-4xl sm:text-5xl md:text-6xl font-black text-white mb-4'>
+            {' '}
+            {/* ✅ RESPONSIVO */}
             <span className='bg-gradient-to-r from-blue-400 to-orange-400 text-transparent bg-clip-text'>
               Calendário
             </span>{' '}
             & Resultados
           </h1>
-          <p className='text-xl text-gray-400 max-w-3xl mx-auto'>
+          <p className='text-lg md:text-xl text-gray-400 max-w-3xl mx-auto'>
+            {' '}
+            {/* ✅ RESPONSIVO */}
             Acompanhe todas as corridas da temporada e os resultados em tempo
             real
           </p>
@@ -157,8 +175,7 @@ export default function CalendarioPageClient({
         <motion.section
           className='mb-20'
           initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          animate={{ opacity: 1, y: 0 }} // ✅ Mudado de whileInView para animate
           transition={{ duration: 0.8 }}
         >
           <div className='flex items-center gap-4 mb-8'>
@@ -170,20 +187,13 @@ export default function CalendarioPageClient({
               🏁
             </motion.div>
             <h2 className='text-3xl md:text-4xl font-bold text-white'>
-              Próximas Corridas
+              {' '}
+              {/* ✅ RESPONSIVO (já estava bom, mas mantive a consistência) */}
+              Próximas Corridas ({eventosFuturos.length})
             </h2>
           </div>
 
-          {loading && eventosFuturos.length === 0 ? (
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-              {[...Array(3)].map((_, i) => (
-                <div
-                  key={i}
-                  className='h-80 bg-gray-800 rounded-2xl animate-pulse'
-                />
-              ))}
-            </div>
-          ) : eventosFuturos.length > 0 ? (
+          {eventosFuturos.length > 0 ? (
             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
               {eventosFuturos.map((evento, index) => {
                 const statusBadge = getStatusBadge(evento.status);
@@ -194,25 +204,12 @@ export default function CalendarioPageClient({
                     key={evento._id}
                     className='group relative bg-gray-900 rounded-2xl overflow-hidden border border-gray-800 hover:border-blue-500/50 transition-all duration-500'
                     initial={{ opacity: 0, y: 50 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
+                    animate={{ opacity: 1, y: 0 }} // ✅ Mudado de whileInView
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     whileHover={{ scale: 1.02, y: -5 }}
                   >
                     {/* Background Pattern */}
                     <div className='absolute inset-0 bg-gradient-to-br from-blue-900/10 to-orange-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500' />
-
-                    {/* Racing Lines */}
-                    <motion.div
-                      className='absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-orange-500'
-                      initial={{ x: '-100%' }}
-                      animate={{ x: '100%' }}
-                      transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        ease: 'linear',
-                      }}
-                    />
 
                     <div className='p-6'>
                       {/* Header */}
@@ -257,23 +254,11 @@ export default function CalendarioPageClient({
                             <span className='text-sm'>{evento.circuito}</span>
                           </div>
                         )}
-
-                        {/* Racing Number */}
-                        <div className='absolute bottom-4 right-4 opacity-10 group-hover:opacity-20 transition-opacity duration-300'>
-                          <div className='text-8xl font-black text-blue-400'>
-                            12
-                          </div>
-                        </div>
                       </div>
 
                       {/* CTA */}
                       {evento.linkParaMateria && (
-                        <motion.div
-                          className='mt-6'
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.3 }}
-                        >
+                        <div className='mt-6'>
                           <a
                             href={evento.linkParaMateria}
                             target='_blank'
@@ -295,54 +280,39 @@ export default function CalendarioPageClient({
                               />
                             </svg>
                           </a>
-                        </motion.div>
+                        </div>
                       )}
                     </div>
-
-                    {/* Glow Effect */}
-                    <div className='absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-orange-500 rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500 pointer-events-none' />
                   </motion.div>
                 );
               })}
             </div>
           ) : (
-            <motion.div
-              className='text-center py-16'
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
+            <div className='text-center py-16'>
               <div className='text-6xl mb-4'>🏎️</div>
               <p className='text-gray-400 text-lg'>
                 Nenhuma corrida agendada no momento.
               </p>
-            </motion.div>
+            </div>
           )}
         </motion.section>
 
         {/* Corridas Anteriores */}
         <motion.section
           initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
+          animate={{ opacity: 1, y: 0 }} // ✅ Mudado de whileInView para animate
+          transition={{ duration: 0.8, delay: 0.5 }}
         >
           <div className='flex items-center gap-4 mb-8'>
             <div className='text-4xl'>🏆</div>
             <h2 className='text-3xl md:text-4xl font-bold text-white'>
-              Corridas Anteriores
+              {' '}
+              {/* ✅ RESPONSIVO (já estava bom, mas mantive a consistência) */}
+              Corridas Anteriores ({eventosPassados.length})
             </h2>
           </div>
 
-          {loading && eventosPassados.length === 0 ? (
-            <div className='space-y-6'>
-              {[...Array(3)].map((_, i) => (
-                <div
-                  key={i}
-                  className='h-32 bg-gray-800 rounded-2xl animate-pulse'
-                />
-              ))}
-            </div>
-          ) : eventosPassados.length > 0 ? (
+          {eventosPassados.length > 0 ? (
             <div className='space-y-6'>
               {eventosPassados.map((evento, index) => {
                 const statusBadge = getStatusBadge(evento.status);
@@ -352,8 +322,7 @@ export default function CalendarioPageClient({
                     key={evento._id}
                     className='group bg-gray-900 rounded-2xl border border-gray-800 hover:border-gray-700 transition-all duration-500 overflow-hidden'
                     initial={{ opacity: 0, x: -50 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
+                    animate={{ opacity: 1, x: 0 }} // ✅ Mudado de whileInView
                     transition={{ duration: 0.6, delay: index * 0.1 }}
                     whileHover={{ x: 5 }}
                   >
@@ -423,29 +392,27 @@ export default function CalendarioPageClient({
 
                         {/* Link */}
                         {evento.linkParaMateria && (
-                          <motion.div whileHover={{ scale: 1.05 }}>
-                            <a
-                              href={evento.linkParaMateria}
-                              target='_blank'
-                              rel='noopener noreferrer'
-                              className='inline-flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded-lg transition-all duration-300 text-sm font-semibold'
+                          <a
+                            href={evento.linkParaMateria}
+                            target='_blank'
+                            rel='noopener noreferrer'
+                            className='inline-flex items-center gap-2 px-4 py-2 bg-blue-500/20 hover:bg-blue-500/30 text-blue-400 rounded-lg transition-all duration-300 text-sm font-semibold'
+                          >
+                            <span>Ver matéria</span>
+                            <svg
+                              className='w-4 h-4'
+                              fill='none'
+                              stroke='currentColor'
+                              viewBox='0 0 24 24'
                             >
-                              <span>Ver matéria</span>
-                              <svg
-                                className='w-4 h-4'
-                                fill='none'
-                                stroke='currentColor'
-                                viewBox='0 0 24 24'
-                              >
-                                <path
-                                  strokeLinecap='round'
-                                  strokeLinejoin='round'
-                                  strokeWidth={2}
-                                  d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'
-                                />
-                              </svg>
-                            </a>
-                          </motion.div>
+                              <path
+                                strokeLinecap='round'
+                                strokeLinejoin='round'
+                                strokeWidth={2}
+                                d='M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14'
+                              />
+                            </svg>
+                          </a>
                         )}
                       </div>
 
@@ -464,16 +431,12 @@ export default function CalendarioPageClient({
               })}
             </div>
           ) : (
-            <motion.div
-              className='text-center py-16'
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
+            <div className='text-center py-16'>
               <div className='text-6xl mb-4'>📊</div>
               <p className='text-gray-400 text-lg'>
                 Nenhum resultado anterior disponível.
               </p>
-            </motion.div>
+            </div>
           )}
         </motion.section>
       </div>

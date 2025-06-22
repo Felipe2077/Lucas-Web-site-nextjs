@@ -313,13 +313,11 @@ export default function PatrocinadoresPage() {
           <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
             <Link
               href='/contato'
-              className='group relative inline-flex items-center gap-3 px-8 py-4 overflow-hidden rounded-full'
+              className='group inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-orange-600 text-white rounded-full font-bold text-lg uppercase tracking-wider transition-all duration-300'
             >
-              <span className='relative z-10 text-white font-bold text-lg uppercase tracking-wider'>
-                Quero Ser Parceiro
-              </span>
+              <span>Quero Ser Parceiro</span>
               <svg
-                className='relative z-10 w-5 h-5 text-white group-hover:translate-x-2 transition-transform'
+                className='w-5 h-5 group-hover:translate-x-2 transition-transform'
                 fill='none'
                 stroke='currentColor'
                 viewBox='0 0 24 24'
@@ -331,13 +329,6 @@ export default function PatrocinadoresPage() {
                   d='M17 8l4 4m0 0l-4 4m4-4H3'
                 />
               </svg>
-              <div className='absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full' />
-              <motion.div
-                className='absolute inset-0 bg-gradient-to-r from-purple-600 to-orange-600 rounded-full'
-                initial={{ x: '100%' }}
-                whileHover={{ x: 0 }}
-                transition={{ duration: 0.5 }}
-              />
             </Link>
           </motion.div>
         </motion.div>

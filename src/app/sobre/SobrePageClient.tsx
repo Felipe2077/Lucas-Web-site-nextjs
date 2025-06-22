@@ -479,13 +479,11 @@ export default function SobrePageClient({ pagina }: SobrePageClientProps) {
               >
                 <Link
                   href='/galeria'
-                  className='group relative inline-flex items-center gap-2 px-8 py-4 overflow-hidden rounded-full'
+                  className='group relative inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-orange-600 text-white rounded-full font-bold uppercase tracking-wider transition-all duration-300 overflow-hidden'
                 >
-                  <span className='relative z-10 text-white font-bold uppercase tracking-wider'>
-                    Ver Galeria
-                  </span>
+                  <span className='relative z-10'>Ver Galeria</span>
                   <svg
-                    className='relative z-10 w-5 h-5 text-white group-hover:translate-x-2 transition-transform'
+                    className='relative z-10 w-5 h-5 group-hover:translate-x-2 transition-transform'
                     fill='none'
                     stroke='currentColor'
                     viewBox='0 0 24 24'
@@ -494,16 +492,9 @@ export default function SobrePageClient({ pagina }: SobrePageClientProps) {
                       strokeLinecap='round'
                       strokeLinejoin='round'
                       strokeWidth={2}
-                      d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z'
+                      d='M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 002 2z'
                     />
                   </svg>
-                  <div className='absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full' />
-                  <motion.div
-                    className='absolute inset-0 bg-gradient-to-r from-purple-600 to-orange-600 rounded-full'
-                    initial={{ x: '100%' }}
-                    whileHover={{ x: 0 }}
-                    transition={{ duration: 0.5 }}
-                  />
                 </Link>
               </motion.div>
 

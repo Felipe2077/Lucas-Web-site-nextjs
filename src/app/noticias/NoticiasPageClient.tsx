@@ -152,7 +152,7 @@ export default function NoticiasPageClient({
 
       {/* Filtros de Categoria */}
       {categorias.length > 0 && (
-        <section className='py-8 bg-gray-900'>
+        <section className='py-8'>
           <div className='container mx-auto px-4'>
             <motion.div
               className='flex flex-wrap justify-center gap-3'

@@ -14,6 +14,7 @@ import type {
 } from '@/types/sanity';
 
 // Importar os Client Components encapsulados
+import ProximaCorridaCountdown from '@/components/calendario/ProximaCorridaCountDown';
 import HomeGaleriaSection from '@/components/galeria/HomeGaleriaSection'; // Já é 'use client'
 import HeroSection from '@/components/home/HeroSection'; // Este é o componente que já existia e já é 'use client'
 import LatestNewsSection from '@/components/home/LatestNewsSection'; // Novo componente criado no passo anterior, e é 'use client'
@@ -123,6 +124,7 @@ export default async function HomePage() {
       )}
 
       {/* Seção Próxima Corrida (se houver um componente Client para isso, adapte o import) */}
+      <ProximaCorridaCountdown proximaCorrida={proximaCorrida} />
       {/* Você pode passar 'proximaCorrida' para um Client Component se ele tiver contagem regressiva ou outras interações */}
       {/* Ex: {proximaCorrida && <ProximaCorridaCountdown proximaCorrida={proximaCorrida} />} */}
 

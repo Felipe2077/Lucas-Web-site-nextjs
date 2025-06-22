@@ -2,7 +2,7 @@
 import { getClient } from '@/lib/sanity.client';
 import type { Categoria, NoticiaCard } from '@/types/sanity';
 import { Metadata } from 'next';
-import NoticiasPageClient from './NoticiasPageClient'; // Vamos criar um Client Component
+import NoticiasPageClient from './NoticiasPageClient';
 
 // Metadados da página de notícias
 export const metadata: Metadata = {
@@ -58,20 +58,27 @@ async function getNoticiasData() {
   }
 }
 
-// Server Component - sem motion, sem hooks
+// ✅ Server Component - searchParams agora é Promise
 export default async function NoticiasPage({
   searchParams,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>; // ✅ Promise type
 }) {
+  // ✅ Await searchParams antes de usar
+  const resolvedSearchParams = await searchParams;
+
   // Buscar dados no servidor
   const { noticias, categorias, totalNoticias } = await getNoticiasData();
 
-  // Extrair parâmetros de busca
+  // ✅ Extrair parâmetros de busca do searchParams resolvido
   const page =
-    typeof searchParams.page === 'string' ? parseInt(searchParams.page) : 1;
+    typeof resolvedSearchParams.page === 'string'
+      ? parseInt(resolvedSearchParams.page)
+      : 1;
   const categoria =
-    typeof searchParams.categoria === 'string' ? searchParams.categoria : null;
+    typeof resolvedSearchParams.categoria === 'string'
+      ? resolvedSearchParams.categoria
+      : null;
 
   // Filtrar notícias por categoria se especificada
   const noticiasFiltradas = categoria
