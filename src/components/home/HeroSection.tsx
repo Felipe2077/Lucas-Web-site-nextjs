@@ -127,11 +127,11 @@ const HeroSection: React.FC<HeroSectionProps> = memo(
 
               <h1 className='font-heading text-5xl md:text-6xl lg:text-7xl font-black mb-3 leading-tight'>
                 <span className='block text-white'>{titleData.firstName}</span>
-                <span className='block bg-gradient-to-r from-blue-400 to-orange-400 text-transparent bg-clip-text'>
+                <span className='bg-gradient-to-r from-blue-400 to-orange-400 text-transparent bg-clip-text'>
                   {titleData.lastName}
                 </span>
                 <motion.span
-                  className='block text-transparent text-5xl md:text-6xl lg:text-7xl font-black mt-1'
+                  className='block text-transparent text-5xl md:text-6xl lg:text-8xl font-black mt-1'
                   style={{
                     WebkitTextStroke: '2px rgba(59, 130, 246, 0.3)',
                     transform: isClient
