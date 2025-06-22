@@ -1,18 +1,17 @@
 // src/components/layout/Header.tsx
-'use client'; // Marca como Client Component por usar hooks e framer-motion
+'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import Image from 'next/image'; // Importar Image do Next.js
-import Link from 'next/link'; // Importar Link do Next.js
-import { usePathname } from 'next/navigation'; // Para detectar a rota atual no Client Component
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const HeaderGlassmorphism = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const pathname = usePathname(); // Usar usePathname do Next.js
+  const pathname = usePathname();
 
-  // Detecta a página atual baseada no pathname
   const currentPath = pathname;
 
   useEffect(() => {
@@ -23,7 +22,6 @@ const HeaderGlassmorphism = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Fecha o menu mobile quando a rota muda
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [currentPath]);
@@ -38,7 +36,6 @@ const HeaderGlassmorphism = () => {
     { href: '/contato', label: 'Contato', icon: '📧' },
   ];
 
-  // Função para verificar se o link está ativo
   const isActiveLink = (href: string) => {
     if (href === '/') {
       return currentPath === '/';
@@ -49,7 +46,7 @@ const HeaderGlassmorphism = () => {
   return (
     <>
       <motion.header
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        className={`fixed top-0 left-0 right-0 z-50 transition-all bg-transparent  duration-500 ${
           isScrolled ? 'py-1 sm:py-2' : 'py-2 sm:py-4'
         }`}
         initial={{ y: -100 }}
@@ -59,57 +56,41 @@ const HeaderGlassmorphism = () => {
         <div className='container mx-auto px-3 sm:px-4'>
           <div
             className={`relative rounded-xl sm:rounded-2xl transition-all duration-500 ${
+              // ✅ CORREÇÃO: Alterado para uma cor mais visível e com maior opacidade.
               isScrolled
-                ? 'bg-black/40 backdrop-blur-2xl border border-white/10'
+                ? 'bg-gray-900/60 backdrop-blur-2xl border border-white/10'
                 : 'bg-transparent'
             }`}
           >
             {/* Glow effect */}
             <div className='absolute -inset-0.5 bg-gradient-to-r from-blue-500 to-orange-500 rounded-xl sm:rounded-2xl opacity-0 group-hover:opacity-20 blur-lg transition-opacity duration-500' />
-
             <div className='relative px-3 sm:px-6 py-3 sm:py-4'>
               <div className='flex items-center justify-between'>
-                {/* Logo */}
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   className='flex-shrink-0'
                 >
                   <Link
-                    href='/' // Usar 'href'
+                    href='/'
                     className='flex items-center gap-2 sm:gap-3 group'
                   >
-                    <div className='relative'>
-                      <motion.div
-                        className='flex items-center'
-                        animate={{
-                          backgroundPosition: ['0%', '100%', '0%'],
-                        }}
-                        transition={{
-                          duration: 5,
-                          repeat: Infinity,
-                          ease: 'linear',
-                        }}
-                      >
-                        <Image // Usar componente Image do Next.js
-                          src='/logo-lucas-foresti.png' // Caminho direto para o arquivo na pasta public/
-                          alt='Lucas Foresti'
-                          width={92} // Definir largura (md:w-[92px])
-                          height={92 * (80 / 92)} // Calcular altura para manter proporção (aprox 80px)
-                          className='w-16 h-auto sm:w-20 md:w-[92px] object-contain'
-                          priority // Carrega a logo mais cedo
-                        />
-                      </motion.div>
+                    <div className='relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24'>
+                      <Image
+                        src='/logo-lucas-foresti.png'
+                        alt='Lucas Foresti'
+                        fill
+                        className='object-contain'
+                        priority
+                      />
                       <div className='absolute -inset-2 bg-blue-500 rounded-full opacity-20 blur-xl group-hover:opacity-40 transition-opacity' />
                     </div>
                   </Link>
                 </motion.div>
 
-                {/* Desktop Navigation */}
                 <nav className='hidden lg:flex items-center gap-2'>
                   {navLinks.map((link, index) => {
                     const isActive = isActiveLink(link.href);
-
                     return (
                       <motion.div
                         key={link.href}
@@ -119,18 +100,16 @@ const HeaderGlassmorphism = () => {
                         transition={{ delay: index * 0.1 }}
                       >
                         <Link
-                          href={link.href} // Usar 'href'
+                          href={link.href}
                           className={`relative px-4 py-2 rounded-xl font-medium transition-all duration-300 group flex items-center gap-2 ${
                             isActive
                               ? 'text-white bg-gradient-to-r from-blue-500/20 to-orange-500/20 border border-blue-500/30'
                               : 'text-gray-300 hover:text-white'
                           }`}
                         >
-                          {/* Hover effect - só aparece se NÃO estiver ativo */}
                           {!isActive && (
                             <div className='absolute inset-0 bg-white/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300' />
                           )}
-
                           <span
                             className={`text-sm transition-opacity duration-300 relative z-10 ${
                               isActive
@@ -141,8 +120,6 @@ const HeaderGlassmorphism = () => {
                             {link.icon}
                           </span>
                           <span className='relative z-10'>{link.label}</span>
-
-                          {/* Underline effect */}
                           <motion.div
                             className='absolute bottom-0 left-1/2 h-0.5 bg-gradient-to-r from-blue-400 to-orange-400 rounded-full'
                             initial={{ width: 0, x: '-50%' }}
@@ -158,7 +135,6 @@ const HeaderGlassmorphism = () => {
                   })}
                 </nav>
 
-                {/* Mobile Menu Button */}
                 <button
                   className='lg:hidden relative w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center flex-shrink-0'
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -193,7 +169,6 @@ const HeaderGlassmorphism = () => {
         </div>
       </motion.header>
 
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -202,7 +177,6 @@ const HeaderGlassmorphism = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            {/* Backdrop */}
             <motion.div
               className='absolute inset-0 bg-black/80 backdrop-blur-xl'
               initial={{ opacity: 0 }}
@@ -211,7 +185,6 @@ const HeaderGlassmorphism = () => {
               onClick={() => setIsMobileMenuOpen(false)}
             />
 
-            {/* Menu Content */}
             <motion.div
               className='absolute top-16 sm:top-20 left-3 right-3 sm:left-4 sm:right-4 bg-black/60 backdrop-blur-2xl rounded-2xl border border-white/10 p-4 sm:p-6'
               initial={{ scale: 0.9, y: -20 }}
@@ -222,7 +195,6 @@ const HeaderGlassmorphism = () => {
               <nav className='flex flex-col gap-2'>
                 {navLinks.map((link, index) => {
                   const isActive = isActiveLink(link.href);
-
                   return (
                     <motion.div
                       key={link.href}
@@ -232,7 +204,7 @@ const HeaderGlassmorphism = () => {
                     >
                       <motion.div whileTap={{ scale: 0.95 }}>
                         <Link
-                          href={link.href} // Usar 'href'
+                          href={link.href}
                           className={`relative px-4 py-3 rounded-xl font-medium group overflow-hidden block ${
                             isActive
                               ? 'text-white bg-gradient-to-r from-blue-500/20 to-orange-500/20 border border-blue-500/30'
@@ -240,7 +212,6 @@ const HeaderGlassmorphism = () => {
                           }`}
                           onClick={() => setIsMobileMenuOpen(false)}
                         >
-                          {/* Hover effect para links não ativos */}
                           {!isActive && (
                             <motion.div
                               className='absolute inset-0 bg-gradient-to-r from-blue-500/20 to-orange-500/20'
@@ -249,7 +220,6 @@ const HeaderGlassmorphism = () => {
                               transition={{ duration: 0.3 }}
                             />
                           )}
-
                           <span className='relative z-10 flex items-center gap-3'>
                             <span className='text-lg'>{link.icon}</span>
                             {link.label}
@@ -267,37 +237,12 @@ const HeaderGlassmorphism = () => {
                   );
                 })}
               </nav>
-
-              {/* Mobile CTA */}
-              <motion.div className='mt-4' whileTap={{ scale: 0.95 }}>
-                <Link
-                  href='/contato' // Usar 'href'
-                  className='inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-purple-600 hover:to-blue-600 text-white rounded-full font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/25 w-full justify-center'
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  <span>Contato</span>
-                  <svg
-                    className='w-4 h-4'
-                    fill='none'
-                    stroke='currentColor'
-                    viewBox='0 0 24 24'
-                  >
-                    <path
-                      strokeLinecap='round'
-                      strokeLinejoin='round'
-                      strokeWidth={2}
-                      d='M17 8l4 4m0 0l-4 4m4-4H3'
-                    />
-                  </svg>
-                </Link>
-              </motion.div>
             </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Add padding to body to account for fixed header */}
-      <div className='h-24 sm:h-28 md:h-32' />
+      <div className='h-24 sm:h-28' />
     </>
   );
 };

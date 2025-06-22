@@ -7,16 +7,6 @@ const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '5w3msavv';
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
 const apiVersion = process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01';
 
-// Debug para produção (opcional, pode remover em produção)
-if (process.env.NODE_ENV !== 'production') {
-  console.log('🔧 Sanity Environment Variables:', {
-    projectId,
-    dataset,
-    apiVersion,
-    env: process.env.NODE_ENV,
-  });
-}
-
 export const client = createClient({
   projectId,
   dataset,
