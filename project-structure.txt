@@ -1,0 +1,67 @@
+.
+├── .env.local
+├── eslint.config.mjs
+├── galeria
+│   └── CardAlbum.tsx
+├── .gitignore
+├── next.config.ts
+├── next-env.d.ts
+├── package.json
+├── pnpm-lock.yaml
+├── postcss.config.mjs
+├── project-structure.txt
+├── public
+│   ├── file.svg
+│   ├── globe.svg
+│   ├── logo-lucas-foresti.png
+│   ├── next.svg
+│   ├── vercel.svg
+│   └── window.svg
+├── README.md
+├── src
+│   ├── app
+│   │   ├── calendario
+│   │   │   └── page.tsx
+│   │   ├── contato
+│   │   │   └── page.tsx
+│   │   ├── favicon.ico
+│   │   ├── galeria
+│   │   │   ├── page.tsx
+│   │   │   └── [slug]
+│   │   │       └── page.tsx
+│   │   ├── globals.css
+│   │   ├── layout.tsx
+│   │   ├── not-found.tsx
+│   │   ├── noticias
+│   │   │   ├── page.tsx
+│   │   │   └── [slug]
+│   │   │       └── page.tsx
+│   │   ├── page.tsx
+│   │   ├── patrocinadores
+│   │   │   └── page.tsx
+│   │   └── sobre
+│   │       └── page.tsx
+│   ├── components
+│   │   ├── calendario
+│   │   │   └── ProximaCorridaCountDown.tsx
+│   │   ├── galeria
+│   │   │   ├── Galeria3DModernCard.tsx
+│   │   │   └── HomeGaleriaSection.tsx
+│   │   ├── home
+│   │   │   ├── HeroSection.tsx
+│   │   │   └── LatestNewsSection.tsx
+│   │   ├── layout
+│   │   │   ├── Footer.tsx
+│   │   │   └── Header.tsx
+│   │   └── noticias
+│   │       ├── CardNoticia.tsx
+│   │       └── PaginationControls.tsx
+│   ├── lib
+│   │   ├── sanity.client.ts
+│   │   └── sanity.server.client.ts
+│   └── types
+│       └── sanity.ts
+├── tailwind.config.ts
+└── tsconfig.json
+
+21 directories, 44 files

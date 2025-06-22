@@ -1,26 +1,309 @@
-@import "tailwindcss";
+/* globals.css - Tailwind CSS v4 + Next.js */
+@import 'tailwindcss';
 
+/* ===== ROOT VARIABLES ===== */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Next.js theme variables */
+  --background: #0a0a0a;
+  --foreground: #ededed;
+
+  /* Force dark mode always */
+  color-scheme: dark;
 }
 
+/* ===== TAILWIND V4 THEME INLINE ===== */
 @theme inline {
+  /* Base colors from CSS variables */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  /* Font families - using Next.js font variables */
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-rajdhani);
+
+  /* ===== CUSTOM PILOT COLORS ===== */
+  /* Piloto Blue Palette */
+  --color-piloto-blue-DEFAULT: #0d6efd;
+  --color-piloto-blue-light: #6bbeff;
+  --color-piloto-blue-dark: #0a3d62;
+
+  /* Accent Colors */
+  --color-accent-orange: #ff6f00;
+  --color-accent-yellow: #ffd600;
+
+  /* Dark Theme Neutral Palette */
+  --color-neutral-900: #121212; /* Main dark background */
+  --color-neutral-800: #1a1d24; /* Slightly lighter surface */
+  --color-neutral-700: #242933; /* Another surface or border */
+  --color-neutral-200: #a0aec0; /* Secondary text on dark background */
+  --color-neutral-100: #f0f0f0; /* Primary text on dark background */
+
+  /* ===== GRADIENT DEFINITIONS ===== */
+  --color-gradient-blue-orange: linear-gradient(
+    135deg,
+    #0d6efd 0%,
+    #ff6f00 100%
+  );
+  --color-gradient-blue-purple: linear-gradient(
+    135deg,
+    #0d6efd 0%,
+    #8b5cf6 100%
+  );
+  --color-gradient-dark: linear-gradient(135deg, #121212 0%, #1a1d24 100%);
 }
 
-@media (prefers-color-scheme: dark) {
+/* ===== BASE STYLING ===== */
+html {
+  background-color: var(--background);
+  color: var(--foreground);
+  scroll-behavior: smooth;
+  /* Prevent horizontal scroll */
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, sans-serif;
+  min-height: 100vh;
+  /* Prevent layout shift */
+  line-height: 1.6;
+  /* Better text rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* ===== FORCE DARK MODE ===== */
+/* Override any light mode attempts */
+@media (prefers-color-scheme: light) {
   :root {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Ensure all elements respect dark mode */
+* {
+  color-scheme: dark;
 }
+
+/* Override problematic light mode classes */
+.bg-white {
+  background-color: #1a1d24 !important;
+  color: #f0f0f0 !important;
+}
+
+.text-black {
+  color: #f0f0f0 !important;
+}
+
+/* ===== SCROLLBAR STYLING ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #242933;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #0d6efd 0%, #6bbeff 100%);
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #6bbeff 0%, #0d6efd 100%);
+}
+
+::-webkit-scrollbar-corner {
+  background: #242933;
+}
+
+/* Firefox scrollbar */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #0d6efd #242933;
+}
+
+/* ===== FOCUS STYLING ===== */
+*:focus {
+  outline: 2px solid #0d6efd;
+  outline-offset: 2px;
+}
+
+/* Better focus for interactive elements */
+button:focus,
+a:focus,
+input:focus,
+textarea:focus,
+select:focus {
+  outline: 2px solid #0d6efd;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.1);
+}
+
+/* ===== SELECTION STYLING ===== */
+::selection {
+  background-color: rgba(13, 110, 253, 0.3);
+  color: #ffffff;
+}
+
+::-moz-selection {
+  background-color: rgba(13, 110, 253, 0.3);
+  color: #ffffff;
+}
+
+/* ===== MOTION PREFERENCES ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ===== PRINT STYLES ===== */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .no-print {
+    display: none !important;
+  }
+}
+
+/* ===== UTILITY OVERRIDES ===== */
+/* Ensure proper spacing */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
+/* ===== PERFORMANCE OPTIMIZATIONS ===== */
+/* Better rendering for animations */
+.will-change-auto {
+  will-change: auto;
+}
+
+.will-change-scroll {
+  will-change: scroll-position;
+}
+
+.will-change-contents {
+  will-change: contents;
+}
+
+.will-change-transform {
+  will-change: transform;
+}
+
+/* GPU acceleration for motion elements */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* ===== ACCESSIBILITY IMPROVEMENTS ===== */
+/* Skip link for keyboard navigation */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #0d6efd;
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  border-radius: 4px;
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  top: 6px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --color-piloto-blue-DEFAULT: #4dabf7;
+    --color-piloto-blue-light: #91d7ff;
+    --color-accent-orange: #ffa726;
+  }
+}
+
+/* ===== COMPONENT-SPECIFIC FIXES ===== */
+/* Fix for Next.js Image component */
+img[style*='position: absolute'] {
+  height: 100% !important;
+}
+
+/* Fix for Framer Motion elements */
+[data-framer-motion] {
+  transform-origin: center;
+}
+
+/* Ensure proper stacking context */
+.relative {
+  position: relative;
+  z-index: 0;
+}
+
+/* ===== DEBUG UTILITIES (remove in production) ===== */
+/* Uncomment for layout debugging */
+/*
+.debug-outline * {
+  outline: 1px solid red;
+}
+
+.debug-grid {
+  background-image: 
+    linear-gradient(rgba(255, 0, 0, 0.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 0, 0, 0.1) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+*/
