@@ -1,7 +1,7 @@
 'use client'; // Necessário para useSearchParams e usePathname (do Next.js)
 
 import Link from 'next/link'; // Importar Link do Next.js
-import { usePathname, useSearchParams } from 'next/navigation'; // Importar hooks do Next.js
+import { useSearchParams } from 'next/navigation'; // Importar hooks do Next.js
 
 interface PaginationControlsProps {
   paginaAtual: number;
@@ -12,7 +12,6 @@ const PaginationControls: React.FC<PaginationControlsProps> = ({
   paginaAtual,
   totalPaginas,
 }) => {
-  const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const criarUrlPagina = (pageNumber: number) => {

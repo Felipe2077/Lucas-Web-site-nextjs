@@ -50,12 +50,10 @@ interface GaleriaAlbumPageClientProps {
 
 export default function GaleriaAlbumPageClient({
   album,
-  slug,
 }: GaleriaAlbumPageClientProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
-  // Se álbum não encontrado
   if (!album) {
     return (
       <div className='container mx-auto px-4 py-16 text-center'>

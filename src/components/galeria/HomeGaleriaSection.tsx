@@ -1,12 +1,13 @@
-'use client'; // Necessário para useState e Framer Motion (dentro de Galeria3DModernCard)
+// src/components/galeria/HomeGaleriaSection.tsx
+'use client';
 
-import { getClient } from '@/lib/sanity.client'; // Alias ajustado
-import { motion } from 'framer-motion';
-import Link from 'next/link'; // Importar Link do Next.js
+import { getClient } from '@/lib/sanity.client';
+import { motion, type Transition, type Variants } from 'framer-motion'; // Adicione 'type Transition' aqui
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import Galeria3DModernCard, {
   type AlbumDataCard,
-} from '../galeria/Galeria3DModernCard'; // Importa o card e seu tipo
+} from '../galeria/Galeria3DModernCard';
 
 const teaserAlbunsQuery = `*[_type == "albumDeFotos" && defined(imagemDeCapa.asset) && defined(slug.current)]{
   _id,
@@ -38,12 +39,17 @@ export default function HomeGaleriaSection() {
     fetchTeaserData();
   }, []);
 
-  const sectionVariants = {
+  // Adicione 'type Variants' aqui para a constante 'sectionVariants'
+  const sectionVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.8, ease: 'easeOut' },
+      // Corrija a linha abaixo, na propriedade 'transition':
+      transition: {
+        duration: 0.8,
+        ease: [0.42, 0, 0.58, 1] as const,
+      } as Transition, // Adicionado 'as const' para o array e 'as Transition' para o objeto
     },
   };
 

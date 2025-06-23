@@ -2,7 +2,6 @@
 'use client'; // Client Component para usar motion e hooks
 
 import { motion } from 'framer-motion';
-import { useState } from 'react';
 
 // Interfaces (mesmas do servidor)
 interface Resultado {
@@ -35,8 +34,8 @@ const formatarData = (dataISO: string) => {
       year: 'numeric',
       timeZone: 'UTC',
     });
-  } catch (_e) {
-    return 'Data inválida';
+  } catch (e) {
+    return 'Data inválida' + e;
   }
 };
 
@@ -58,8 +57,8 @@ const formatarHora = (dataISO: string) => {
       });
     }
     return '';
-  } catch (_e) {
-    return '';
+  } catch (e) {
+    return '' + e;
   }
 };
 
@@ -93,8 +92,6 @@ const getStatusBadge = (status: string) => {
 export default function CalendarioPageClient({
   eventos,
 }: CalendarioPageClientProps) {
-  const [loading] = useState(false); // Dados já vêm do servidor
-
   const hojeISO = new Date().toISOString();
 
   // ✅ Separar eventos de forma mais clara

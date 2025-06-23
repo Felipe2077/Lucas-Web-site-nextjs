@@ -68,7 +68,7 @@ export default async function NoticiasPage({
   const resolvedSearchParams = await searchParams;
 
   // Buscar dados no servidor
-  const { noticias, categorias, totalNoticias } = await getNoticiasData();
+  const { noticias, categorias } = await getNoticiasData();
 
   // ✅ Extrair parâmetros de busca do searchParams resolvido
   const page =

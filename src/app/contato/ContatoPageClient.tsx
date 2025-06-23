@@ -5,8 +5,6 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 export default function ContatoPageClient() {
-  const nomeDoPiloto = 'Lucas Foresti'; // Hardcoded como no original
-
   // Redes sociais - mesmas do Footer (copiadas)
   const socialLinks = [
     {

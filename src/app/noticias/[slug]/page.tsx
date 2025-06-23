@@ -32,8 +32,9 @@ const noticiaQuery = `*[_type == "noticia" && slug.current == $slug][0]{
   categorias[]->{_id, nome, slug}
 }`;
 
+// ATENÇÃO: Corrija esta interface para refletir que 'params' é uma Promise
 interface NoticiasDetalhePageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>; // AGORA É UMA PROMISE
 }
 
 // Função para buscar os dados no servidor
@@ -70,7 +71,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: NoticiasDetalhePageProps): Promise<Metadata> {
-  const noticia = await getNoticiaBySlug(params.slug);
+  // ATENÇÃO: Adicione 'await' para resolver a Promise de 'params'
+  const { slug } = await params;
+  const noticia = await getNoticiaBySlug(slug);
 
   if (!noticia) {
     return {
@@ -108,7 +111,8 @@ export async function generateMetadata({
 export default async function NoticiasDetalhePage({
   params,
 }: NoticiasDetalhePageProps) {
-  const { slug } = params;
+  // ATENÇÃO: Adicione 'await' para resolver a Promise de 'params'
+  const { slug } = await params;
   const noticia = await getNoticiaBySlug(slug);
 
   if (!noticia) {

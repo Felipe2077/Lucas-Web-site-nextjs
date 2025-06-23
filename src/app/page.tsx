@@ -67,7 +67,6 @@ async function getHomePageData(): Promise<HomePageData> {
     const data: HomePageData = await client.fetch(homePageDataQuery, {
       hojeISO,
     });
-    console.log('Server - Dados da paginaSobre do Sanity:', data.paginaSobre);
 
     return data;
   } catch (error) {
@@ -86,18 +85,12 @@ async function getHomePageData(): Promise<HomePageData> {
 
 export default async function HomePage() {
   const homeData = await getHomePageData();
-  const { ultimasNoticias, proximaCorrida, teaserAlbuns, paginaSobre } =
-    homeData;
+  const { ultimasNoticias, proximaCorrida, paginaSobre } = homeData;
 
   const imageUrlPrincipal =
     paginaSobre?.imagemPrincipal && isValidImage(paginaSobre.imagemPrincipal)
       ? getImageUrl(paginaSobre.imagemPrincipal, 1200)
       : null;
-
-  console.log(
-    'Server - imageUrlPrincipal after calculation (page.tsx):',
-    imageUrlPrincipal
-  );
 
   return (
     // ✅ CORREÇÃO: Aplicado o mesmo padrão de grade do HeroSection ao container principal da página

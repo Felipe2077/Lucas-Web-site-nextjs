@@ -45,7 +45,7 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 
   const description = pagina.biografia
-    ? (pagina.biografia[0] as any)?.children?.[0]?.text?.substring(0, 160) ||
+    ? pagina.biografia[0]?.children?.[0]?.text?.substring(0, 160) ||
       `Saiba mais sobre a carreira e trajetória de ${
         pagina.titulo || 'Lucas Foresti'
       }.`

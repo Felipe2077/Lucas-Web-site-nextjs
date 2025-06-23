@@ -157,9 +157,7 @@ export default function SobrePageClient({ pagina }: SobrePageClientProps) {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <div className='absolute top-2 left-2 text-blue-400/30 text-4xl font-serif'>
-              "
-            </div>
+            <div className='absolute top-2 left-2 text-blue-400/30 text-4xl font-serif'></div>
             <div className='pl-6'>{props.children}</div>
           </motion.blockquote>
         ),

@@ -152,9 +152,7 @@ export default function NoticiaDetalhePageClient({
         ),
         blockquote: (props: PortableTextComponentProps<PortableTextBlock>) => (
           <blockquote className='relative border-l-4 border-blue-400 bg-gradient-to-r from-blue-500/10 to-purple-500/10 backdrop-blur-sm pl-8 pr-6 py-6 italic my-12 rounded-r-2xl text-gray-200 font-medium text-lg leading-relaxed'>
-            <div className='absolute top-4 left-4 text-blue-400/40 text-6xl font-serif leading-none'>
-              "
-            </div>
+            <div className='absolute top-4 left-4 text-blue-400/40 text-6xl font-serif leading-none'></div>
             <div className='relative z-10 mt-6'>{props.children}</div>
           </blockquote>
         ),

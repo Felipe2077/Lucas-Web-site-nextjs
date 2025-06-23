@@ -6,7 +6,7 @@ import PaginationControls from '@/components/noticias/PaginationControls';
 import type { Categoria, NoticiaCard } from '@/types/sanity';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 interface NoticiasPageClientProps {
@@ -23,24 +23,16 @@ export default function NoticiasPageClient({
   categorias,
   currentPage,
   totalPages,
-  totalNoticias,
+
   currentCategory,
 }: NoticiasPageClientProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  // const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
 
   const nomeDoPiloto = 'Lucas Foresti';
-  const pageTitle = `Notícias - ${nomeDoPiloto}`;
+  //const pageTitle = `Notícias - ${nomeDoPiloto}`;
   const pageDescription = `Fique por dentro das últimas notícias e novidades sobre ${nomeDoPiloto} na Stock Car.`;
-
-  // Função para navegar entre páginas
-  const handlePageChange = (newPage: number) => {
-    setLoading(true);
-    const params = new URLSearchParams(searchParams);
-    params.set('page', newPage.toString());
-    router.push(`/noticias?${params.toString()}`);
-  };
 
   // Função para filtrar por categoria
   const handleCategoryFilter = (categorySlug: string | null) => {
@@ -231,9 +223,8 @@ export default function NoticiasPageClient({
                   transition={{ duration: 0.6, delay: 0.3 }}
                 >
                   <PaginationControls
-                    currentPage={currentPage}
-                    totalPages={totalPages}
-                    onPageChange={handlePageChange}
+                    paginaAtual={currentPage}
+                    totalPaginas={totalPages}
                   />
                 </motion.div>
               )}

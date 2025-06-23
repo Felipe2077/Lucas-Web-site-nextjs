@@ -1,7 +1,11 @@
 // src/lib/sanity.client.ts
 import { createClient } from '@sanity/client';
 import imageUrlBuilder from '@sanity/image-url';
-import type { SanityImageObject } from '../types/sanity'; // Certifique-se de que o caminho está correto
+import type {
+  SanityAssetDocument,
+  SanityImageObject,
+  SanityReference,
+} from '../types/sanity'; // Importe SanityReference e SanityAssetDocument
 
 const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '5w3msavv';
 const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production';
@@ -45,14 +49,22 @@ export function urlFor(
   }
 }
 
-// Função helper para verificar se uma imagem é válida (Ajustada)
+// Função helper para verificar se uma imagem é válida (CORRIGIDA)
 export function isValidImage(
   source: SanityImageObject | null | undefined
 ): boolean {
-  if (!source) return false;
-  // Uma imagem é considerada válida se tiver um asset.
-  // O asset pode ter um _ref (referência) ou um _id (se for o objeto asset expandido).
-  return !!(source.asset?._ref || source.asset?._id);
+  if (!source || !source.asset) return false;
+
+  // Usa um type guard para verificar se 'asset' é uma SanityReference ou SanityAssetDocument
+  if ('_ref' in source.asset) {
+    // Se tem '_ref', é uma SanityReference. Verifica se '_ref' tem um valor.
+    return !!(source.asset as SanityReference)._ref;
+  } else if ('_id' in source.asset) {
+    // Se não tem '_ref' mas tem '_id', é uma SanityAssetDocument. Verifica se '_id' tem um valor.
+    return !!(source.asset as SanityAssetDocument)._id;
+  }
+  // Se não tem nem '_ref' nem '_id' (improvável se o Sanity estiver configurado), não é válido.
+  return false;
 }
 
 // Função helper para obter URL de imagem com fallback seguro (Inalterada, pois usa urlFor e isValidImage)
@@ -78,23 +90,18 @@ export function getImageUrl(
 // Função de teste de conexão com melhor tratamento de erro (Inalterada)
 export async function testSanityConnection() {
   try {
-    console.log('🔍 Testando conexão com Sanity...');
     const result = await client.fetch('*[_type == "categoria"][0]');
-    console.log('✅ Sanity connection successful:', result);
     return true;
   } catch (error) {
     console.error('❌ Sanity connection failed:', error);
 
     try {
       const directUrl = `https://${projectId}.api.sanity.io/v${apiVersion}/data/query/${dataset}?query=*[_type == "categoria"][0]`;
-      console.log('🔍 Testando URL direta:', directUrl);
 
       const response = await fetch(directUrl);
-      console.log('📡 Response status:', response.status);
 
       if (response.ok) {
         const data = await response.json();
-        console.log('✅ Direct fetch successful:', data);
       } else {
         console.error('❌ Direct fetch failed:', response.statusText);
       }

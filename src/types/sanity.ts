@@ -16,12 +16,28 @@ export interface Slug {
 // Alias para compatibilidade
 export type SanitySlug = Slug;
 
+// Novo: Tipo para um documento de asset expandido do Sanity
+export interface SanityAssetDocument {
+  _id: string;
+  _type: string; // Geralmente 'sanity.imageAsset' ou 'sanity.fileAsset'
+  url: string;
+  // Se você sempre expande metadata, pode adicioná-lo aqui também
+  metadata?: {
+    dimensions: {
+      width: number;
+      height: number;
+      aspectRatio: number;
+    };
+  };
+}
+
 // Tipo para imagens do Sanity
 export interface SanityImageObject {
   _type: 'image';
-  asset: SanityReference;
+  // A propriedade 'asset' agora pode ser uma referência ou o documento de asset expandido
+  asset: SanityReference | SanityAssetDocument; // Corrigido aqui
   _key?: string;
-  _ref?: string;
+  _ref?: string; // Manter _ref opcional para compatibilidade, embora o asset expandido use _id
   alt?: string;
   legenda?: string;
   hotspot?: {
@@ -56,7 +72,7 @@ export interface NoticiaCard {
   imagemDeCapa?: SanityImageObject;
   resumo?: string;
   dataPublicacao: string;
-  dataDePublicacao?: string; // Alias para compatibilidade
+  dataDePublicacao: string; // Alias para compatibilidade
   categoria?: Categoria;
   categorias?: Categoria[]; // Para múltiplas categorias
   conteudo?: PortableTextBlock[];
