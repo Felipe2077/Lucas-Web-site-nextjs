@@ -6,15 +6,15 @@ import PaginationControls from '@/components/noticias/PaginationControls';
 import type { Categoria, NoticiaCard } from '@/types/sanity';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation'; // Adicione useSearchParams aqui
+import { useEffect, useState } from 'react'; // Adicione useEffect aqui
 
 interface NoticiasPageClientProps {
   noticias: NoticiaCard[];
   categorias: Categoria[];
   currentPage: number;
   totalPages: number;
-  totalNoticias: number;
+  totalNoticias: number; // Esta prop foi comentada anteriormente, mas se você a usa, certifique-se de que está sendo passada corretamente
   currentCategory: string | null;
 }
 
@@ -23,16 +23,29 @@ export default function NoticiasPageClient({
   categorias,
   currentPage,
   totalPages,
-
+  totalNoticias, // Garanta que esta prop está sendo recebida se você a usa
   currentCategory,
 }: NoticiasPageClientProps) {
   const router = useRouter();
-  // const searchParams = useSearchParams();
+  const searchParams = useSearchParams(); // Descomentei esta linha, pois você a usa na função
   const [loading, setLoading] = useState(false);
 
   const nomeDoPiloto = 'Lucas Foresti';
-  //const pageTitle = `Notícias - ${nomeDoPiloto}`;
+  //const pageTitle = `Notícias - ${nomeDoPiloto}`; // Comentada conforme correção anterior
   const pageDescription = `Fique por dentro das últimas notícias e novidades sobre ${nomeDoPiloto} na Stock Car.`;
+
+  // NOVO: useEffect para definir loading como false quando os dados são atualizados
+  useEffect(() => {
+    setLoading(false);
+  }, [noticias, categorias, currentPage, totalPages, currentCategory]); // Dependências: quando qualquer uma destas props mudar, significa que os dados foram carregados.
+
+  // Função para navegar entre páginas
+  const handlePageChange = (newPage: number) => {
+    setLoading(true);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('pagina', newPage.toString());
+    router.push(`/noticias?${params.toString()}`);
+  };
 
   // Função para filtrar por categoria
   const handleCategoryFilter = (categorySlug: string | null) => {
@@ -41,14 +54,14 @@ export default function NoticiasPageClient({
     if (categorySlug) {
       params.set('categoria', categorySlug);
     }
-    params.set('page', '1'); // Reset para página 1
+    params.set('pagina', '1'); // Reset para página 1
     router.push(`/noticias?${params.toString()}`);
   };
 
   return (
     <div className='min-h-screen bg-black text-white'>
       {/* Hero Section */}
-      <section className='relative min-h-[60vh] flex items-center overflow-hidden pt-16'>
+      <section className='relative min-h-[20vh] flex items-center overflow-hidden pt-16'>
         {/* Background Effects */}
         <div className='absolute inset-0'>
           <div className='absolute inset-0 bg-gradient-to-br from-blue-900/20 via-black to-orange-900/20' />
@@ -154,7 +167,8 @@ export default function NoticiasPageClient({
             >
               <button
                 onClick={() => handleCategoryFilter(null)}
-                className={`px-4 py-2 rounded-full font-medium transition-all duration-300 ${
+                // Adicione a classe 'cursor-pointer' aqui:
+                className={`px-4 py-2 rounded-full font-medium transition-all duration-300 cursor-pointer ${
                   !currentCategory
                     ? 'bg-blue-500 text-white'
                     : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
@@ -168,7 +182,8 @@ export default function NoticiasPageClient({
                   onClick={() =>
                     handleCategoryFilter(categoria.slug?.current || null)
                   }
-                  className={`px-4 py-2 rounded-full font-medium transition-all duration-300 ${
+                  // Adicione a classe 'cursor-pointer' aqui:
+                  className={`px-4 py-2 rounded-full font-medium transition-all duration-300 cursor-pointer ${
                     currentCategory === categoria.slug?.current
                       ? 'bg-blue-500 text-white'
                       : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
