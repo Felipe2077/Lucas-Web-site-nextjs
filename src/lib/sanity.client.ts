@@ -90,7 +90,7 @@ export function getImageUrl(
 // Função de teste de conexão com melhor tratamento de erro (Inalterada)
 export async function testSanityConnection() {
   try {
-    const result = await client.fetch('*[_type == "categoria"][0]');
+    // const result = await client.fetch('*[_type == "categoria"][0]');
     return true;
   } catch (error) {
     console.error('❌ Sanity connection failed:', error);
@@ -101,7 +101,7 @@ export async function testSanityConnection() {
       const response = await fetch(directUrl);
 
       if (response.ok) {
-        const data = await response.json();
+        // const data = await response.json();
       } else {
         console.error('❌ Direct fetch failed:', response.statusText);
       }

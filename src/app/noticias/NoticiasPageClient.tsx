@@ -6,7 +6,7 @@ import PaginationControls from '@/components/noticias/PaginationControls';
 import type { Categoria, NoticiaCard } from '@/types/sanity';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation'; // Adicione useSearchParams aqui
+import { useRouter } from 'next/navigation'; // Adicione useSearchParams aqui
 import { useEffect, useState } from 'react'; // Adicione useEffect aqui
 
 interface NoticiasPageClientProps {
@@ -23,11 +23,10 @@ export default function NoticiasPageClient({
   categorias,
   currentPage,
   totalPages,
-  totalNoticias, // Garanta que esta prop está sendo recebida se você a usa
+
   currentCategory,
 }: NoticiasPageClientProps) {
   const router = useRouter();
-  const searchParams = useSearchParams(); // Descomentei esta linha, pois você a usa na função
   const [loading, setLoading] = useState(false);
 
   const nomeDoPiloto = 'Lucas Foresti';
@@ -38,14 +37,6 @@ export default function NoticiasPageClient({
   useEffect(() => {
     setLoading(false);
   }, [noticias, categorias, currentPage, totalPages, currentCategory]); // Dependências: quando qualquer uma destas props mudar, significa que os dados foram carregados.
-
-  // Função para navegar entre páginas
-  const handlePageChange = (newPage: number) => {
-    setLoading(true);
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('pagina', newPage.toString());
-    router.push(`/noticias?${params.toString()}`);
-  };
 
   // Função para filtrar por categoria
   const handleCategoryFilter = (categorySlug: string | null) => {
