@@ -250,7 +250,7 @@ export default function NoticiaDetalhePageClient({
 
       <div className='min-h-screen bg-black text-white'>
         {/* Hero Section */}
-        <section className='relative min-h-[60vh] flex items-center overflow-hidden pt-32'>
+        <section className='relative min-h-[60vh] flex items-center overflow-hidden pt-12 pb-4'>
           {imageUrlCapa && (
             <div className='absolute inset-0'>
               <Image

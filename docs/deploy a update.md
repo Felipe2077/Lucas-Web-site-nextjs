@@ -39,7 +39,7 @@
     Para que as alterações do novo build entrem em vigor, você precisa reiniciar o processo do PM2 que está servindo sua aplicação.
 
     ```bash
-    sudo pm2 restart lucas-foresti-site
+     pm2 restart lucas-foresti-site
     ```
 
     _Usamos `sudo` aqui porque o serviço de auto-inicialização do PM2 (`pm2-root.service`) foi configurado para rodar como `root`, então você precisa de privilégios `sudo` para controlá-lo._
